@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.esprit.examen.entities.DetailFacture;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Transactional
+@AllArgsConstructor
 public class FactureServiceImpl implements IFactureService {
 
     @Autowired

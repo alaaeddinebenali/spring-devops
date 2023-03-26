@@ -2,20 +2,24 @@ package com.esprit.examen.services;
 
 import com.esprit.examen.entities.Facture;
 import com.esprit.examen.repositories.FactureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class FactureServiceImplUTest {
 
     @InjectMocks
@@ -23,30 +27,21 @@ public class FactureServiceImplUTest {
     @Mock
     private FactureRepository factureRepository;
 
-    @Autowired
-    private IFactureService iFactureService;
+    private List<Facture> factures = new ArrayList<>();
+    private Facture facture = new Facture();
 
-    private List<Facture> factures;
-    private Facture facture;
-
-    @BeforeEach
-    void setUp() {
-        this.factureService= new FactureServiceImpl();
+    @Test
+    public void whenFetch_givenAllFactury_expectSuccess() {
         for (int i = 0; i < 5; i++) {
-            Facture facture = new Facture();
             facture.setIdFacture(i + 0L);
             facture.setMontantFacture(15 + i);
             facture.setArchivee(false);
             facture.setDateCreationFacture(new Date());
             facture.setDateDerniereModificationFacture(new Date());
             facture.setMontantRemise(2 + i);
-            this.factures.add(facture);
+            factures.add(facture);
         }
-    }
-
-    @Test
-    public void whenFetch_givenAllFactury_expectSuccess() {
         Mockito.when(factureRepository.findAll()).thenReturn(factures);
-        assertEquals(this.iFactureService.retrieveAllFactures(), 5);
+        assertEquals(5, this.factureService.retrieveAllFactures().size());
     }
 }

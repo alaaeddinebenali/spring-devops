@@ -23,8 +23,8 @@ public class FactureRestController {
     @Autowired
     IFactureService factureService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    /*@Autowired
+    private ModelMapper modelMapper = new ModelMapper();*/
 
 
     // http://localhost:8089/SpringMVC/facture/retrieve-all-factures
@@ -44,8 +44,9 @@ public class FactureRestController {
     // http://localhost:8089/SpringMVC/facture/add-facture/{fournisseur-id}
     @PostMapping("/add-facture")
     @ResponseBody
-    public FactureDto addFacture(@RequestBody FactureDto f) {
-        return modelMapper.map(factureService.addFacture(modelMapper.map(f, Facture.class)), FactureDto.class);
+    public Facture addFacture(@RequestBody Facture f) {
+        //return modelMapper.map(factureService.addFacture(modelMapper.map(f, Facture.class)), FactureDto.class);
+        return factureService.addFacture(f);
     }
 
     /*
