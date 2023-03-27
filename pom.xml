@@ -18,7 +18,12 @@
     </properties>
     <!-- Add below artifact ID -->
     <packaging>war</packaging>
-
+    <distributionManagement>
+        <repository>
+            <id>my-repo-id</id>
+            <url>http://192.168.1.112:8081/repository/maven-spring-boot-snapshots</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
