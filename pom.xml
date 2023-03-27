@@ -19,10 +19,10 @@
     <!-- Add below artifact ID -->
     <packaging>war</packaging>
     <distributionManagement>
-        <repository>
-            <id>my-repo-id</id>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
             <url>http://192.168.1.112:8081/repository/maven-spring-boot-snapshots</url>
-        </repository>
+        </snapshotRepository>
     </distributionManagement>
     <dependencies>
         <dependency>
@@ -140,6 +140,11 @@
                         <include>DataCheck.java</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
             </plugin>
         </plugins>
     </build>
