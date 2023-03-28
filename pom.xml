@@ -20,7 +20,7 @@
     <packaging>war</packaging>
     <distributionManagement>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
+            <id>maven-spring-boot-snapshots</id>
             <url>http://192.168.1.112:8081/repository/maven-spring-boot-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
