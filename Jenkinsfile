@@ -69,7 +69,7 @@ pipeline {
                         sh 'docker push 72.10.0.140:8082/docker-devops-repo/esprit-devops-angular:${BUILD_TAG}'
                 }
             }
-       
+     
        
             stage('Push Angular image to Docker Hub') {
                 steps {
@@ -88,8 +88,8 @@ pipeline {
             stage ('GIT Checkout for Spring Boot App') {
                     steps {
                         echo '...Pulling...';
-                        git branch: 'main',
-                        url : 'https://github.com/Adnen-Developer/tpAchatProject'
+                        git branch: 'adnen',
+                        url : 'https://github.com/alaaeddinebenali/spring-devops'
                        // credentialsId:  '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';
                     }
             }
