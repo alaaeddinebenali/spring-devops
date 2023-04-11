@@ -24,3 +24,4 @@ EXPOSE 8089
 
 # Set the command to run when the container starts
 CMD ["java", "-jar", "tpAchatProject-1.0.jar"]
+
