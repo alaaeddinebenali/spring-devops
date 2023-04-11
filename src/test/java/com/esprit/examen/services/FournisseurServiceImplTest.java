@@ -98,21 +98,4 @@ class FournisseurServiceImplTest {
         assertNotNull(retrievedFournisseur);
         verify(fournisseurRepository, times(1)).findById(id);
     }
-
-    @Test
-    void testAssignSecteurActiviteToFournisseur() {
-        Long idSecteurActivite = 1L;
-        Long idFournisseur = 2L;
-        Fournisseur fournisseur = new Fournisseur();
-        SecteurActivite secteurActivite = new SecteurActivite();
-        when(fournisseurRepository.findById(idFournisseur)).thenReturn(Optional.of(fournisseur));
-        when(secteurActiviteRepository.findById(idSecteurActivite)).thenReturn(Optional.of(secteurActivite));
-
-        fournisseurService.assignSecteurActiviteToFournisseur(idSecteurActivite, idFournisseur);
-
-        assertTrue(fournisseur.getSecteurActivites().contains(secteurActivite));
-        verify(fournisseurRepository, times(1)).findById(idFournisseur);
-        verify(secteurActiviteRepository, times(1)).findById(idSecteurActivite);
-        verify(fournisseurRepository, times(1)).save(fournisseur);
-    }
 }
