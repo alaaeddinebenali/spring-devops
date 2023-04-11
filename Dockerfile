@@ -9,12 +9,13 @@ WORKDIR /app
 
 # Build the application using Maven
 RUN mvn clean package -DskipTests
-
+RUN ls target
 # Use a Java runtime as the base image
 FROM openjdk:8-jre-alpine
 
 # Set the working directory in the container
 WORKDIR /app
+RUN ls target
 
 # Copy the packaged jar file to the container
 COPY target/tpAchatProject-1.0.jar .
