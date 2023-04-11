@@ -1,5 +1,9 @@
-# Use the official Maven image as the base image
-FROM maven:3.8.3-jdk-8
+# Use the Java 8 base image with Alpine Linux
+FROM openjdk:8-jre-alpine
+
+# Install Maven
+RUN apk update && \
+    apk add --no-cache maven
 
 # Copy the application code to the container
 COPY . /app
@@ -7,22 +11,18 @@ COPY . /app
 # Set the working directory to the application directory
 WORKDIR /app
 
-# Build the application using Maven
-RUN mvn clean package -DskipTests
-RUN ls target
-# Use a Java runtime as the base image
-FROM openjdk:8-jre-alpine
+# Build the application using Maven and move the jar file to the current directory
+RUN mvn clean package -DskipTests && \
+    mv target/tpAchatProject-1.0.jar ./
 
-# Set the working directory in the container
-WORKDIR /app
-RUN ls target
-
-# Copy the packaged jar file to the container
-COPY target/tpAchatProject-1.0.jar .
+# Clean up unnecessary files and remove Maven
+RUN mvn clean && \
+    apk del maven && \
+    rm -rf /var/cache/apk/* && \
+    rm -rf target
 
 # Expose port 8089 for the application
 EXPOSE 8089
 
 # Set the command to run when the container starts
-#CMD ["java", "-jar", "tpAchatProject-1.0.jar"]
 CMD ["java", "-jar", "tpAchatProject-1.0.jar"]
