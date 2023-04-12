@@ -14,6 +14,12 @@ pipeline{
       NEXUS_REPOSITORY = "maven-spring-boot-snapshots"
       // Jenkins credential id to authenticate to Nexus OSS
       NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
+
+      registry = "alaaeddinebenali/spring-tp-achat-project"
+
+      registryCredential = 'Alaa1998Dev'
+
+      dockerImage = ''
      }
     stages{
         stage("Checkout Project"){
@@ -104,7 +110,23 @@ pipeline{
             }
         }
 
+        stage('Building our image') {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
 
+        stage('Deploy our image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+             }
+        }
     }
 
     post {
