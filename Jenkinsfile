@@ -90,9 +90,9 @@ pipeline {
 
             stage('Push Spring Boot image to Nexus') {
                 steps {
-                        sh 'sudo docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
+                        sh 'sudo docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} 72.100.0.140:8082/marwen-jeridi-nexus/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
                         sh 'sudo docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.100.0.140:8082'
-                        sh 'sudo docker push 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
+                        sh 'sudo docker push 72.100.0.140:8082/marwen-jeridi-nexus/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
                 }
             }
 
@@ -112,10 +112,10 @@ pipeline {
                  }
             }
 
-            stage('create Spring boot, ANgular and Mysql App') {
+            stage('create Spring boot and Mysql App') {
               steps {
 
-                  sh 'sudo  DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME}  DOCKER_HUB_ANGULAR_REPO=${DOCKER_HUB_ANGULAR_REPO}  DOCKER_HUB_SPRING_REPO=${DOCKER_HUB_SPRING_REPO}   MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}     MYSQL_DATABASE=${MYSQL_DATABASE} MY_DOCKER_BUILD_VERSION=${MY_DOCKER_BUILD_VERSION} docker compose -f /home/vagrant/Docker-Compose-springmysql.yml up -d '
+                  sh 'sudo  DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME}    DOCKER_HUB_SPRING_REPO=${DOCKER_HUB_SPRING_REPO}   MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}     MYSQL_DATABASE=${MYSQL_DATABASE} MY_DOCKER_BUILD_VERSION=${MY_DOCKER_BUILD_VERSION} docker compose -f /home/vagrant/Docker-Compose-springmysql.yml up -d '
 
               }
             }
