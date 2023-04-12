@@ -1,0 +1,123 @@
+pipeline {
+        agent any 
+               environment {
+           
+                    NEXUS_USERNAME = 'admin'
+                    NEXUS_PASSWORD ='HECHdour85'
+                    DOCKER_HUB_USERNAME= 'hichemdoura'
+                    DOCKER_HUB_PASSWORD= 'dckr_pat_O9phkpfhT3YxHEvVA9ZTlY8I3UI'
+                    DOCKER_HUB_SPRING_REPO= 'spring-boot-esprit-repo'
+                    MYSQL_ROOT_PASSWORD = 'root'
+                    MYSQL_PASSWORD = 'root'
+                    MYSQL_DATABASE = 'tpachato'
+                    VERSION_NUMBER=11
+                         
+        }
+        stages {
+            
+            
+            stage ('GIT Checkout') {
+                steps {
+                    echo '...Pulling...';
+                    git branch: 'hichem',
+                    url : 'https://github.com/alaaeddinebenali/spring-devops.git'
+                }
+            }
+
+
+            stage ('Start Sonar and Nexus') {
+                steps {
+                    echo " ...Starting Sonar and Nexus... "
+                    sh "sudo docker compose -f /home/vagrant/SonarAndNexus/docker-compose.yml start"
+                }
+            }
+            
+            
+            
+            stage ('Maven Build') {
+                steps {
+                    echo " ...Building MAVEN... "
+                    sh "mvn -B -DskipTests clean package"
+                }
+            }
+            
+            
+            stage ('Test') {
+                steps {
+                    echo "...MAVEN Testing... "
+                    sh "mvn test"
+                    echo " ...MAVEN Test finished... "
+                }
+            }
+            
+           
+            
+
+            stage ('MVN SonarQube') {
+                steps {
+                    //sleep(time: 1, unit: "MINUTES")
+                    echo " ...Quality Code Analyzed by SonarQube... "
+                    sh "mvn sonar:sonar -Dsonar.projectKey=tpAchatProject -Dsonar.host.url=http://72.168.1.55:9000 -Dsonar.login=bc16f4d71f203c00bec784aba2559fcdc0e461d9"
+                }
+            }
+            
+            
+            stage('Build Spring Boot image') {
+                           
+                    steps {
+                        echo '...Building Image...';
+                        //sh 'declare x=$(date +%s-%A-%B)'
+                        //sh 'sudo echo $VERSION_NUMBER'
+                        //sh 'declare VERSION_NUMBER=55'
+                        //sh 'sudo docker build -t spring-boot-image:$(date +%s-%A-%B) . '
+                      //  sh '  x=$(date +%s-%A-%B)'
+                    //    sh 'docker build -t spring-boot-image:${x} .'
+                        //sh 'docker build -t spring-boot-image:${x} . '
+                        //sh 'sudo docker build -t spring-boot-image:sp22 . '
+                        
+                    //    sh 'declare VERSION_NUMBER=$(date +%s-%A-%B)'
+                        sh 'sudo docker build -t spring-boot-image:"${VERSION_NUMBER}" . '
+                             
+                    }
+            }
+            
+
+            stage('Push Spring Boot image to Nexus') {
+                steps {
+                        echo '...Pushing SpringBoot image ==> Nexus...';
+                        sh 'sudo docker tag spring-boot-image:${VERSION_NUMBER} 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
+                        sh 'sudo docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.168.1.55:8082'
+                        sh 'sudo docker push 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
+                }
+            }
+            
+             stage ('Stop Sonar and Nexus') {
+                steps {
+                    echo '...Stopping Sonar and Nexus...';
+                    sh "sudo docker compose -f /home/vagrant/SonarAndNexus/docker-compose.yml stop"
+                }
+            }
+       
+
+            stage('Push Spring Boot image to Docker Hub') {
+                steps {
+                        echo '...Pushing SpringBoot image ==> Docker Hub...';
+                        sh 'sudo docker tag spring-boot-image:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                        sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                        sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
+                        
+                }
+            }
+        
+            stage ('Start Spring Boot Application') {
+                steps {
+                    echo '...Starting Spring Boot Application...';
+                      sh 'sudo  DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME}    DOCKER_HUB_SPRING_REPO=${DOCKER_HUB_SPRING_REPO}   MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}     MYSQL_DATABASE=${MYSQL_DATABASE} VERSION_NUMBER=${VERSION_NUMBER} docker compose -f /home/vagrant/docker-compose-spring-mysql.yml up -d '
+
+           //         sh "sudo docker compose -f /home/vagrant/docker-compose-spring-mysql.yml up -d"
+                }
+            }
+                                
+           
+        }
+}
