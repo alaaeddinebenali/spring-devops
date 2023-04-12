@@ -14,6 +14,7 @@ pipeline {
                     MYSQL_ROOT_PASSWORD = 'root'
                     MYSQL_PASSWORD = 'toor'
                     MYSQL_DATABASE = 'tpachato'
+                    MY_DOCKER_BUILD_VERSION=1234
 
 
         }
@@ -81,8 +82,7 @@ pipeline {
             stage('Build Spring Boot image') {
 
                     steps {
-                    sh 'declare MY_DOCKER_BUILD_VERSION=$(date +%s-%A-%B)'
-                    sh 'docker build -t tp-achat-project:${MY_DOCKER_BUILD_VERSION} .'
+                    sh 'sudo docker build -t tp-achat-project:${MY_DOCKER_BUILD_VERSION} .'
 
                     }
             }
@@ -116,7 +116,6 @@ pipeline {
               steps {
 
                   sh 'sudo  DOCKER_HUB_USERNAME=${DOCKER_HUB_USERNAME}  DOCKER_HUB_ANGULAR_REPO=${DOCKER_HUB_ANGULAR_REPO}  DOCKER_HUB_SPRING_REPO=${DOCKER_HUB_SPRING_REPO}   MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}     MYSQL_DATABASE=${MYSQL_DATABASE} MY_DOCKER_BUILD_VERSION=${MY_DOCKER_BUILD_VERSION} docker compose -f /home/vagrant/Docker-Compose-springmysql.yml up -d '
-                sh 'unset MY_DOCKER_BUILD_VERSION'
 
               }
             }
