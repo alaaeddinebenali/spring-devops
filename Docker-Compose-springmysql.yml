@@ -1,0 +1,48 @@
+# Define the version of the Docker Compose file format being used
+version: '3'
+
+# Define the services (containers) that make up the application
+services:
+  # Define the MySQL service
+  mysqlmarwenservice:
+    # Use the latest version of the official MySQL Docker image
+    image: mysql:latest
+    # Create a volume to store the MySQL data
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # Set environment variables for the MySQL container
+    environment:
+  #    MYSQL_ROOT_PASSWORD: root
+  #    MYSQL_DATABASE: tpachato
+     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+     MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    networks:
+      - marwen-network
+  # Define the Spring Boot application service
+  spring-app:
+    depends_on:
+      - mysqlmarwenservice
+    restart: on-failure
+    # Use the Docker image for the Spring Boot application
+  #  image: adnendeveloper/spring-boot-esprit-repo:jenkins-adnen-pipeline-13
+    image: ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${MY_DOCKER_BUILD_VERSION}
+    # Set environment variables for the Spring Boot container
+    # environment:
+    # Expose the port used by the Spring Boot application container
+    ports:
+      - "8089:8089"
+    networks:
+      - marwen-network
+
+# Define the volume used by the MySQL container
+volumes:
+  mysql_data:
+
+# Define the network used by the containers
+networks:
+  marwen-network:
+    external:
+      name: marwen-network
+  
