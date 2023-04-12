@@ -49,19 +49,19 @@ pipeline {
 
             stage ('Build') {
                     steps {
-                       sh "mvn -B -DskipTests clean package"
+                       sh "sudo mvn -B -DskipTests clean package"
                     }
             }
 
             stage ('Test') {
                     steps {
-                        sh "mvn test"
+                        sh "sudo mvn test"
                     }
             }
 
             stage ('Package') {
                     steps {
-                        sh "mvn package"
+                        sh "sudo mvn package"
                     }
             }
 
@@ -70,7 +70,9 @@ pipeline {
 
             stage("build & SonarQube analysis") {
                     steps {
-                        sh  "mvn sonar:sonar -Dsonar.projectKey=tpAchatProject -Dsonar.host.url=http://72.100.0.140:9000 -Dsonar.login=8141a4e2160b1ac55882ad543046c4eb0ff436ce"
+                        sh  "sudo mvn sonar:sonar -Dsonar.projectKey=springProjectMarwen  -Dsonar.host.url=http://72.100.0.140:9000  -Dsonar.login=335e8b5a68e2bdc341a2792b4a66d454ef9e164e"
+                   
+
                     }
             }
 
@@ -88,18 +90,18 @@ pipeline {
 
             stage('Push Spring Boot image to Nexus') {
                 steps {
-                        sh 'docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
-                        sh 'docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.100.0.140:8082'
-                        sh 'docker push 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
+                        sh 'sudo docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
+                        sh 'sudo docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.100.0.140:8082'
+                        sh 'sudo docker push 72.100.0.140:8082/docker-devops-repo/tp-achat-project:${MY_DOCKER_BUILD_VERSION}'
                 }
             }
 
 
             stage('Push Spring Boot image to Docker Hub') {
                 steps {
-                        sh 'docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${MY_DOCKER_BUILD_VERSION} '
-                        sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
-                        sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${MY_DOCKER_BUILD_VERSION}'
+                        sh 'sudo docker tag tp-achat-project:${MY_DOCKER_BUILD_VERSION} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${MY_DOCKER_BUILD_VERSION} '
+                        sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                        sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${MY_DOCKER_BUILD_VERSION}'
 
                 }
             }
@@ -122,9 +124,9 @@ pipeline {
 
           stage('LOGOUT'){
                 steps {
-                  sh 'docker logout docker.io'
-                  sh "docker logout ${DOCKER_HUB_USERNAME}"
-                  sh 'docker logout 72.100.0.140:8082'
+                  sh 'sudo docker logout docker.io'
+                  sh "sudo docker logout ${DOCKER_HUB_USERNAME}"
+                  sh 'sudo docker logout 72.100.0.140:8082'
                 }
             }
 
