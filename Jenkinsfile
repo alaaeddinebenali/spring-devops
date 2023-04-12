@@ -12,7 +12,7 @@ pipeline {
                     DOCKER_HUB_PASSWORD= 'dckr_pat_iN3M9CP3V2_jz32XjOq3uCfWHHs'
                     DOCKER_HUB_SPRING_REPO= 'marwen-jeridi-repo-docker'
                     MYSQL_ROOT_PASSWORD = 'root'
-                    MYSQL_PASSWORD = 'toor'
+                    MYSQL_PASSWORD = 'root'
                     MYSQL_DATABASE = 'tpachato'
                     MY_DOCKER_BUILD_VERSION=1234
 
