@@ -3,6 +3,7 @@ pipeline{
     tools {
         maven 'M2_HOME'
     }
+    def app
     environment {
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
@@ -25,7 +26,7 @@ pipeline{
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
         VERSION_NUMBER=11
         dockerImage = ''
-   }
+    }
     stages{
         stage("Checkout Project"){
             steps{
