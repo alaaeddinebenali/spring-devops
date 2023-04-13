@@ -120,7 +120,7 @@ pipeline{
         stage('Building our image') {
             steps {
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build(registry + ":$BUILD_NUMBER")
                 }
             }
         }
@@ -139,7 +139,7 @@ pipeline{
             }*/
             steps {
                 script {
-                    docker.withRegistry( '', registryCredential ) {
+                    docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
                         dockerImage.push()
                     }
                 }
@@ -150,7 +150,6 @@ pipeline{
     post {
         always {
             echo 'JENKINS PIPELINE'
-            sh 'docker LOGOUT'
         }
         success {
             echo 'JENKINS PIPELINE SUCCESSFUL'
