@@ -117,22 +117,26 @@ pipeline{
 
         stage('Build image') {
             steps {
-                /* This builds the actual image; synonymous to
-                 * docker build on the command line */
+                script {
+                    /* This builds the actual image; synonymous to
+                     * docker build on the command line */
 
-                docker.build('${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}')
+                    docker.build('${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}')
+                }
             }
         }
 
         stage('Push image') {
             steps {
-                /* Finally, we'll push the image with two tags:
-                 * First, the incremental build number from Jenkins
-                 * Second, the 'latest' tag.
-                 * Pushing multiple tags is cheap, as all the layers are reused. */
-                docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
-                    app.push('${VERSION_NUMBER}')
-                    app.push("latest")
+                script {
+                    /* Finally, we'll push the image with two tags:
+                     * First, the incremental build number from Jenkins
+                     * Second, the 'latest' tag.
+                     * Pushing multiple tags is cheap, as all the layers are reused. */
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
+                        app.push('${VERSION_NUMBER}')
+                        app.push("latest")
+                    }
                 }
             }
         }
