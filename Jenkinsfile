@@ -2,6 +2,7 @@ pipeline{
     agent any
     tools {
         maven 'M2_HOME'
+        docker
     }
     environment {
       // This can be nexus3 or nexus2
@@ -119,6 +120,11 @@ pipeline{
         }
 
         stage('Deploy our image') {
+            /*withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
+                sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
+                sh "docker build -t your-docker-username/your-docker-repo-name ."
+                sh "docker push your-docker-username/your-docker-repo-name"
+            }*/
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
