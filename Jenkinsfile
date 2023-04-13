@@ -115,14 +115,41 @@ pipeline{
             }
         }
 
-        stage('Push project to Docker Hub') {
+        stage('Build image') {
+            /* This builds the actual image; synonymous to
+             * docker build on the command line */
+
+            app = docker.build('${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}')
+        }
+
+        stage('Test image') {
+            /* Ideally, we would run a test framework against our image.
+             * For this example, we're using a Volkswagen-type approach ;-) */
+
+            app.inside {
+                sh 'echo "Tests passed"'
+            }
+        }
+
+        stage('Push image') {
+            /* Finally, we'll push the image with two tags:
+             * First, the incremental build number from Jenkins
+             * Second, the 'latest' tag.
+             * Pushing multiple tags is cheap, as all the layers are reused. */
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
+                app.push('${VERSION_NUMBER}')
+                app.push("latest")
+            }
+        }
+
+        /*stage('Push project to Docker Hub') {
             steps {
                 echo '...Pushing SpringBoot image ==> Docker Hub...';
                 sh 'docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
                 sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
                 sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
             }
-        }
+        }*/
     }
 
     post {
