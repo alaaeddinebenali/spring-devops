@@ -118,7 +118,7 @@ pipeline{
         stage('Push project to Docker Hub') {
             steps {
                 echo '...Pushing SpringBoot image ==> Docker Hub...';
-                sh 'docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                sh 'docker tag ${DOCKER_HUB_SPRING_REPO}:latest docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
                 sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
                 sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
             }
