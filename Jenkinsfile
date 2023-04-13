@@ -2,7 +2,6 @@ pipeline{
     agent any
     tools {
         maven 'M2_HOME'
-        docker
     }
     environment {
       // This can be nexus3 or nexus2
@@ -18,7 +17,8 @@ pipeline{
 
       registry = "alaaeddinebenali/spring-tp-achat-project"
 
-      registryCredential = 'Alaa1998Dev'
+      registryCredential = 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+      DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
 
       dockerImage = ''
      }
@@ -111,11 +111,23 @@ pipeline{
             }
         }
 
+        stage ('Login to docker hub') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
         stage('Building our image') {
             steps {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                sh 'docker push alaaeddinebenali/spring-tp-achat-project'
             }
         }
 
@@ -138,6 +150,7 @@ pipeline{
     post {
         always {
             echo 'JENKINS PIPELINE'
+            sh 'docker LOGOUT'
         }
         success {
             echo 'JENKINS PIPELINE SUCCESSFUL'
