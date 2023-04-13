@@ -4,28 +4,28 @@ pipeline{
         maven 'M2_HOME'
     }
     environment {
-      // This can be nexus3 or nexus2
-      NEXUS_VERSION = "nexus3"
-      // This can be http or https
-      NEXUS_PROTOCOL = "http"
-      // Where your Nexus is running
-      NEXUS_URL = "192.168.1.112:8081"
-      // Repository where we will upload the artifact
-      NEXUS_REPOSITORY = "maven-spring-boot-snapshots"
-      // Jenkins credential id to authenticate to Nexus OSS
-      NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
+        // This can be nexus3 or nexus2
+        NEXUS_VERSION = "nexus3"
+        // This can be http or https
+        NEXUS_PROTOCOL = "http"
+        // Where your Nexus is running
+        NEXUS_URL = "192.168.1.112:8081"
+        // Repository where we will upload the artifact
+        NEXUS_REPOSITORY = "maven-spring-boot-snapshots"
+        // Jenkins credential id to authenticate to Nexus OSS
+        NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
 
-      registry = "alaaeddinebenali/spring-tp-achat-project"
+        registry = "alaaeddinebenali/spring-tp-achat-project"
 
-      registryCredential = 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+        registryCredential = 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
 
-      DOCKER_HUB_USERNAME= 'alaaeddinebenali'
-      DOCKER_HUB_PASSWORD= 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
-      DOCKER_HUB_SPRING_REPO= 'spring-tp-achat-project'
-      DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
-
-      dockerImage = ''
-     }
+        DOCKER_HUB_USERNAME= 'alaaeddinebenali'
+        DOCKER_HUB_PASSWORD= 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+        DOCKER_HUB_SPRING_REPO= 'spring-tp-achat-project'
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
+        VERSION_NUMBER=11
+        dockerImage = ''
+   }
     stages{
         stage("Checkout Project"){
             steps{
@@ -118,9 +118,9 @@ pipeline{
         stage('Push project to Docker Hub') {
             steps {
                 echo '...Pushing SpringBoot image ==> Docker Hub...';
-                //sh 'docker tag ${DOCKER_HUB_SPRING_REPO}:latest docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:latest'
-                sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
-                sh 'docker push  ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:latest'
+                sh 'sudo docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
             }
         }
     }
