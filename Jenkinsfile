@@ -117,38 +117,20 @@ pipeline{
 
         stage('Build image') {
             steps {
-                script {
-                    /* This builds the actual image; synonymous to
-                     * docker build on the command line */
-
-                    docker.build('${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}')
-                }
+                echo '...Building Image...';
+                sh 'docker build -t ${DOCKER_HUB_SPRING_REPO}:"${VERSION_NUMBER}" . '
             }
         }
 
-        stage('Push image') {
+        stage('Push image to Docker Hub') {
             steps {
-                script {
-                    /* Finally, we'll push the image with two tags:
-                     * First, the incremental build number from Jenkins
-                     * Second, the 'latest' tag.
-                     * Pushing multiple tags is cheap, as all the layers are reused. */
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
-                        app.push('${VERSION_NUMBER}')
-                        app.push("latest")
-                    }
-                }
+                    echo '...Pushing SpringBoot image ==> Docker Hub...';
+                    sh 'sudo docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                    sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                    sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
+
             }
         }
-
-        /*stage('Push project to Docker Hub') {
-            steps {
-                echo '...Pushing SpringBoot image ==> Docker Hub...';
-                sh 'docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
-                sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
-                sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
-            }
-        }*/
     }
 
     post {
