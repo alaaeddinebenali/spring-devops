@@ -18,6 +18,10 @@ pipeline{
       registry = "alaaeddinebenali/spring-tp-achat-project"
 
       registryCredential = 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+
+      DOCKER_HUB_USERNAME= 'alaaeddinebenali'
+      DOCKER_HUB_PASSWORD= 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+      DOCKER_HUB_SPRING_REPO= 'spring-tp-achat-project'
       DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
 
       dockerImage = ''
@@ -111,39 +115,13 @@ pipeline{
             }
         }
 
-        /*stage ('Login to docker hub') {
+        stage('Push project to Docker Hub') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                echo '...Pushing SpringBoot image ==> Docker Hub...';
+                sh 'sudo docker tag ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
             }
-        }*/
-
-        stage('Building our image') {
-            steps {
-                script {
-                    dockerImage = docker.build(registry + ":$BUILD_NUMBER")
-                }
-            }
-        }
-
-        stage('Push') {
-            steps {
-                sh 'docker push alaaeddinebenali/spring-tp-achat-project'
-            }
-        }
-
-        stage('Deploy our image') {
-            /*withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_HUB_PASSWORD', usernameVariable: 'DOCKER_HUB_USERNAME')]) {
-                sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
-                sh "docker build -t your-docker-username/your-docker-repo-name ."
-                sh "docker push your-docker-username/your-docker-repo-name"
-            }*/
-            steps {
-                script {
-                    docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                        dockerImage.push()
-                    }
-                }
-             }
         }
     }
 
