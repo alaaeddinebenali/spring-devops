@@ -3,7 +3,6 @@ pipeline{
     tools {
         maven 'M2_HOME'
     }
-    def app
     environment {
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
