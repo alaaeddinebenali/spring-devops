@@ -48,7 +48,7 @@ pipeline{
         stage ('Start Sonar and Nexus') {
             steps {
                 echo '...Stopping Sonar and Nexus...';
-                sh 'docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml start'
+                sh 'sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml start'
             }
         }
 
@@ -59,17 +59,17 @@ pipeline{
             }
         }
 
-        stage ('Stop Sonar and Nexus') {
-            steps {
-                echo '...Stopping Sonar and Nexus...';
-                sh "docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml stop"
-            }
-        }
-
         stage('Sonar Scanner Coverage') {
             steps{
                 echo "Sonar analysing quality code ..."
                 sh "mvn sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.login=ba90109aa9d3264d45cd1832b599edab1bdd691c"
+            }
+        }
+
+        stage ('Stop Sonar and Nexus') {
+            steps {
+                echo '...Stopping Sonar and Nexus...';
+                sh "sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml stop"
             }
         }
 
@@ -141,7 +141,7 @@ pipeline{
     post {
         always {
             echo 'JENKINS PIPELINE'
-            sh 'dockeer logout'
+            sh 'docker logout'
         }
         success {
             echo 'JENKINS PIPELINE SUCCESSFUL'
