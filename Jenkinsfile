@@ -45,12 +45,12 @@ pipeline{
             }
         }
 
-        stage ('Start Sonar and Nexus') {
+        /*stage ('Start Sonar and Nexus') {
             steps {
                 echo '...Stopping Sonar and Nexus...';
                 sh 'docker-compose -f /home/vagrant/SonarAndNexus/docker-compose.yml up -d'
             }
-        }
+        }*/
 
         stage('Test & Jacoco Static Analysis') {
             steps {
@@ -66,12 +66,12 @@ pipeline{
             }
         }
 
-        stage ('Stop Sonar and Nexus') {
+        /*stage ('Stop Sonar and Nexus') {
             steps {
                 echo '...Stopping Sonar and Nexus...';
                 sh "docker-compose -f /home/vagrant/SonarAndNexus/docker-compose.yml down"
             }
-        }
+        }*/
 
         stage("publish to nexus") {
             steps {
