@@ -4,5 +4,5 @@ COPY . .
 RUN mvn clean package -DskipTests
 FROM openjdk:8-jre-alpine
 WORKDIR /app
-COPY /app/target/tpAchatProject-1.0-SNAPSHOT.war /app/tpAchatProject.war
-CMD ["java", "-war", "/app/tpAchatProject.war"]
+COPY /app/target/tpAchatProject-1.0-SNAPSHOT.war .
+CMD ["java", "-war", "tpAchatProject-1.0-SNAPSHOT.war"]
