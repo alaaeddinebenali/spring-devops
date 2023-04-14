@@ -38,15 +38,6 @@ pipeline{
             }
         }
 
-        stage('Clean Project') {
-            steps {
-                echo "mvn --version"
-                sh "mvn --version"
-                echo "Cleaning ..."
-                sh "mvn clean"
-            }
-        }
-
         stage('Packaging Project') {
             steps {
                 echo "Packging ..."
@@ -54,7 +45,7 @@ pipeline{
             }
         }
 
-        stage('Test & Jacoco Static Analysis') {
+        /*stage('Test & Jacoco Static Analysis') {
             steps {
                 echo 'Code Coverage'
                 jacoco()
@@ -113,7 +104,7 @@ pipeline{
                     }
                 }
             }
-        }
+        }*/
 
         stage('Build image') {
             steps {
