@@ -45,6 +45,13 @@ pipeline{
             }
         }
 
+        stage ('Start Sonar and Nexus') {
+            steps {
+                echo '...Stopping Sonar and Nexus...';
+                sh 'sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml up -d'
+            }
+        }
+
         stage('Test & Jacoco Static Analysis') {
             steps {
                 echo 'Code Coverage'
@@ -56,6 +63,13 @@ pipeline{
             steps{
                 echo "Sonar analysing quality code ..."
                 sh "mvn sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.login=ba90109aa9d3264d45cd1832b599edab1bdd691c"
+            }
+        }
+
+        stage ('Stop Sonar and Nexus') {
+            steps {
+                echo '...Stopping Sonar and Nexus...';
+                sh "sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml down"
             }
         }
 
