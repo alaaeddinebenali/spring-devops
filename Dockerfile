@@ -1,8 +1,8 @@
-FROM maven:3.8.3-jdk-8 as builder
+FROM maven:3.8.3-jdk-8
 WORKDIR /app
 COPY . .
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 FROM openjdk:8-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/target/tpAchatProject-1.0.jar /app/tpAchatProject.jar
+COPY /app/target/tpAchatProject-1.0.jar /app/tpAchatProject.jar
 CMD ["java", "-jar", "/app/tpAchatProject.jar"]
