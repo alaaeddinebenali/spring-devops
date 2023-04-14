@@ -45,7 +45,7 @@ pipeline{
             }
         }
 
-        /*stage('Test & Jacoco Static Analysis') {
+        stage('Test & Jacoco Static Analysis') {
             steps {
                 echo 'Code Coverage'
                 jacoco()
@@ -104,7 +104,8 @@ pipeline{
                     }
                 }
             }
-        }*/
+        }
+
         stage('Build image') {
             steps {
                 echo '...Building Image...';
@@ -126,6 +127,7 @@ pipeline{
     post {
         always {
             echo 'JENKINS PIPELINE'
+            sh 'dockeer logout'
         }
         success {
             echo 'JENKINS PIPELINE SUCCESSFUL'
