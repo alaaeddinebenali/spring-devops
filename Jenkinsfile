@@ -4,6 +4,10 @@ pipeline{
         maven 'M2_HOME'
     }
     environment {
+
+        // Sonar Key Credential
+        SONAR_CREDENTIAL_KEY = "ba90109aa9d3264d45cd1832b599edab1bdd691c"
+
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
         // This can be http or https
@@ -62,7 +66,7 @@ pipeline{
         stage('Sonar Scanner Coverage') {
             steps{
                 echo "Sonar analysing quality code ..."
-                sh "mvn sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.login=ba90109aa9d3264d45cd1832b599edab1bdd691c"
+                sh 'mvn sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.login=${SONAR_CREDENTIAL_KEY}'
             }
         }
 
