@@ -106,7 +106,7 @@ pipeline{
             }
         }*/
 
-        stages {
+
             stage('Build') {
               steps {
                 sh 'docker build -t <your-docker-image-name> .'
@@ -118,7 +118,7 @@ pipeline{
                 sh 'docker push <your-docker-image-name>'
               }
             }
-          }
+
 
         /*stage('Build image') {
             steps {
