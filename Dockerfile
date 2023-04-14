@@ -15,9 +15,5 @@ FROM openjdk:8-jre-alpine
 
 # Set the working directory in the container
 WORKDIR /app
-RUN ls .
-RUN ls /app
-RUN ls /app/target
-RUN ls /app/target/
 COPY /app/target/tpAchatProject-1.0-SNAPSHOT.war /app/tpAchatProject.war
 CMD ["java", "-jar", "/app/tpAchatProject.war"]
