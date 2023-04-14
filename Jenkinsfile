@@ -109,7 +109,7 @@ pipeline{
         stage('Build image') {
             steps {
                 echo '...Building Image...';
-                sh 'docker build -t ${DOCKER_HUB_SPRING_REPO}:"${VERSION_NUMBER}" . '
+                sh 'docker build -t ${DOCKER_HUB_SPRING_REPO}" . '
             }
         }
 
