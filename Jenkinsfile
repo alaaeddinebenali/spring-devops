@@ -106,7 +106,44 @@ pipeline{
             }
         }*/
 
-        stage('Build image') {
+        stage('Build Spring Boot image') {
+
+                            steps {
+                                echo '...Building Image...';
+                                sh 'sudo docker build -t spring-boot-image:"${VERSION_NUMBER}" . '
+
+                            }
+                    }
+
+
+                    stage('Push Spring Boot image to Nexus') {
+                        steps {
+                                echo '...Pushing SpringBoot image ==> Nexus...';
+                                sh 'sudo docker tag spring-boot-image:${VERSION_NUMBER} 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
+                                sh 'sudo docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.168.1.55:8082'
+                                sh 'sudo docker push 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
+                        }
+                    }
+
+                     stage ('Stop Sonar and Nexus') {
+                        steps {
+                            echo '...Stopping Sonar and Nexus...';
+                            sh "sudo docker compose -f /home/vagrant/SonarAndNexus/docker-compose.yml stop"
+                        }
+                    }
+
+
+                    stage('Push Spring Boot image to Docker Hub') {
+                        steps {
+                                echo '...Pushing SpringBoot image ==> Docker Hub...';
+                                sh 'sudo docker tag spring-boot-image:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
+                                sh 'sudo docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
+                                sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
+
+                        }
+                    }
+
+        /*stage('Build image') {
             steps {
                 echo '...Building Image...';
                 sh 'docker build -t ${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} . '
@@ -121,7 +158,7 @@ pipeline{
                     sh 'sudo docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
 
             }
-        }
+        }*/
     }
 
     post {
