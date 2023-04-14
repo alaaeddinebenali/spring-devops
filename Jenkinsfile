@@ -109,13 +109,13 @@ pipeline{
 
             stage('Build') {
               steps {
-                sh 'docker build -t <your-docker-image-name> .'
+                sh 'docker build -t ${DOCKER_HUB_SPRING_REPO} .'
               }
             }
 
             stage('Push') {
               steps {
-                sh 'docker push <your-docker-image-name>'
+                sh 'docker push ${DOCKER_HUB_SPRING_REPO}'
               }
             }
 
