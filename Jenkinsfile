@@ -106,42 +106,19 @@ pipeline{
             }
         }*/
 
-        stage('Build Spring Boot image') {
+        stages {
+            stage('Build') {
+              steps {
+                sh 'docker build -t <your-docker-image-name> .'
+              }
+            }
 
-                            steps {
-                                echo '...Building Image...';
-                                sh 'docker build -t spring-boot-image:"${VERSION_NUMBER}" . '
-
-                            }
-                    }
-
-
-                    stage('Push Spring Boot image to Nexus') {
-                        steps {
-                                echo '...Pushing SpringBoot image ==> Nexus...';
-                                sh 'docker tag spring-boot-image:${VERSION_NUMBER} 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
-                                sh 'docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD 72.168.1.55:8082'
-                                sh 'docker push 72.168.1.55:8082/docker-images-devops/spring-boot-image:${VERSION_NUMBER}'
-                        }
-                    }
-
-                     stage ('Stop Sonar and Nexus') {
-                        steps {
-                            echo '...Stopping Sonar and Nexus...';
-                            sh "docker compose -f /home/vagrant/SonarAndNexus/docker-compose.yml stop"
-                        }
-                    }
-
-
-                    stage('Push Spring Boot image to Docker Hub') {
-                        steps {
-                                echo '...Pushing SpringBoot image ==> Docker Hub...';
-                                sh 'docker tag spring-boot-image:${VERSION_NUMBER} docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER} '
-                                sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
-                                sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
-
-                        }
-                    }
+            stage('Push') {
+              steps {
+                sh 'docker push <your-docker-image-name>'
+              }
+            }
+          }
 
         /*stage('Build image') {
             steps {
