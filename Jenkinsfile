@@ -48,7 +48,7 @@ pipeline{
         stage ('Start Sonar and Nexus') {
             steps {
                 echo '...Stopping Sonar and Nexus...';
-                sh 'sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml up -d'
+                sh 'docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml up -d'
             }
         }
 
@@ -69,7 +69,7 @@ pipeline{
         stage ('Stop Sonar and Nexus') {
             steps {
                 echo '...Stopping Sonar and Nexus...';
-                sh "sudo docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml down"
+                sh "docker-compose /home/vagrant/SonarAndNexus/docker-compose.yml down"
             }
         }
 
