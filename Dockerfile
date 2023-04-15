@@ -20,4 +20,4 @@ FROM openjdk:8-jre-alpine
 EXPOSE 8089
 ADD target/tpAchatProject-1.0-SNAPSHOT.jar /app/tpAchatProject.jar
 RUN chmod +x /app/tpAchatProject.jar
-CMD ["java", "-jar", "/tpAchatProject.jar"]
+CMD ["java", "-jar", "/app/tpAchatProject.jar"]
