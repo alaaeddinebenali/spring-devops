@@ -127,7 +127,7 @@ pipeline {
             stage('Build Spring Boot image') {
 
                     steps {
-                    sh 'declare BUILD_TAG=$(date +%s-%A-%B)'
+          //          sh 'declare BUILD_TAG=$(date +%s-%A-%B)'
                     sh 'docker build -t tp-achat-project:${BUILD_TAG} .'
 
                     }
