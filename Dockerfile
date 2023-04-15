@@ -15,7 +15,7 @@
 #EXPOSE 8089
 
 #CMD ["java", "-jar", "/app/tpAchatProject.war"]
-
+FROM maven:3.8.3-jdk-8
 FROM openjdk:8-jre-alpine
 COPY . /app
 WORKDIR /app
