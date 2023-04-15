@@ -5,22 +5,21 @@ services:
   mysqldb:
     image: mysql:5.7
     restart: always
-    env_file: ./.env
     environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+      - MYSQL_DATABASE=tpachato
+      - MYSQL_ROOT_PASSWORD=root
     ports:
-      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+      - 3306:3306
     volumes:
       - db-data:/var/lib/mysql
 
   spring_app:
+    image: alaaeddinebenali/spring-tp-achat-project:11
+    restart: on-failure
+    ports:
+      - 8089:8089
     depends_on:
       - mysqldb
-    image: alaaeddinebenali/spring-tp-achat-project
-    env_file: ./.env
-    ports:
-      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
 
   angular-app:
     image: alaaeddinebenali/angular-tp-achat-project:latest

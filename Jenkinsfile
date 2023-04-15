@@ -19,16 +19,11 @@ pipeline{
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
 
-        registry = "alaaeddinebenali/spring-tp-achat-project"
-
-        registryCredential = 'dckr_pat_EBNwyeRcWKDgdWyPuTCLN7oUjfI'
-
         DOCKER_HUB_USERNAME= 'alaaeddinebenali'
         DOCKER_HUB_PASSWORD= 'dckr_pat_EBNwyeRcWKDgdWyPuTCLN7oUjfI'
         DOCKER_HUB_SPRING_REPO= 'spring-tp-achat-project'
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
         VERSION_NUMBER=11
-        dockerImage = ''
     }
     stages{
         stage("Checkout Project"){
@@ -49,13 +44,6 @@ pipeline{
             }
         }
 
-        /*stage ('Start Sonar and Nexus') {
-            steps {
-                echo '...Stopping Sonar and Nexus...';
-                sh 'docker-compose -f /home/vagrant/SonarAndNexus/docker-compose.yml up -d'
-            }
-        }*/
-
         stage('Test & Jacoco Static Analysis') {
             steps {
                 echo 'Code Coverage'
@@ -69,13 +57,6 @@ pipeline{
                 sh 'mvn sonar:sonar -Dsonar.projectKey=spring-boot -Dsonar.login=${SONAR_CREDENTIAL_KEY}'
             }
         }
-
-        /*stage ('Stop Sonar and Nexus') {
-            steps {
-                echo '...Stopping Sonar and Nexus...';
-                sh "docker-compose -f /home/vagrant/SonarAndNexus/docker-compose.yml down"
-            }
-        }*/
 
         stage("publish to nexus") {
             steps {
@@ -138,6 +119,11 @@ pipeline{
                     sh 'docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD'
                     sh 'docker push  docker.io/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_SPRING_REPO}:${VERSION_NUMBER}'
 
+            }
+        }
+        stage('Run angular & spring boot application') {
+            steps {
+                echo ''
             }
         }
     }
