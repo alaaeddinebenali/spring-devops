@@ -1,5 +1,4 @@
 version: '3'
-
 # Define the services (containers) that make up the application
 services:
   # Define the MySQL service
