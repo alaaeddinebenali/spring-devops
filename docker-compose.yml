@@ -13,6 +13,7 @@ services:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
       - db-data:/var/lib/mysql
+
   spring_app:
     depends_on:
       - mysqldb
@@ -21,5 +22,11 @@ services:
     ports:
       - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
 
+  angular-app:
+    image: alaaeddinebenali/angular-tp-achat-project:latest
+    ports:
+      - 4200:4200
+    depends_on:
+      - spring_app
 volumes:
   db-data:

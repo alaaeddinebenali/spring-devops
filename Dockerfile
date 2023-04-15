@@ -12,4 +12,6 @@ WORKDIR /app
 
 COPY target/tpAchatProject-1.0-SNAPSHOT.war /app/tpAchatProject.war
 
+EXPOSE 8089
+
 CMD ["java", "-jar", "/app/tpAchatProject.war"]
