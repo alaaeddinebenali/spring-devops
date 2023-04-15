@@ -21,7 +21,7 @@ pipeline{
 
         registry = "alaaeddinebenali/spring-tp-achat-project"
 
-        registryCredential = 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
+        registryCredential = 'dckr_pat_EBNwyeRcWKDgdWyPuTCLN7oUjfI'
 
         DOCKER_HUB_USERNAME= 'alaaeddinebenali'
         DOCKER_HUB_PASSWORD= 'dckr_pat_gHtCYGm2_UqL13ySb1MptKUB1to'
