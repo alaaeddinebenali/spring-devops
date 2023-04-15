@@ -6,7 +6,7 @@ pipeline{
     environment {
 
         // Sonar Key Credential
-        SONAR_CREDENTIAL_KEY = "ba90109aa9d3264d45cd1832b599edab1bdd691c"
+        SONAR_CREDENTIAL_KEY = "ef160034eb0625724a5d98e308f2d0c4cba2ce53"
 
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
