@@ -17,7 +17,10 @@
 #CMD ["java", "-jar", "/app/tpAchatProject.war"]
 
 FROM openjdk:8-jre-alpine
+COPY . /app
+WORKDIR /app
+RUN mvn clean package -DskipTests
 EXPOSE 8089
-ADD target/tpAchatProject-1.0-SNAPSHOT.jar /app/tpAchatProject.jar
+COPY target/tpAchatProject-1.0-SNAPSHOT.jar /app/tpAchatProject.jar
 RUN chmod +x /app/tpAchatProject.jar
 CMD ["java", "-jar", "/app/tpAchatProject.jar"]
