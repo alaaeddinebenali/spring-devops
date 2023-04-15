@@ -123,7 +123,7 @@ pipeline{
         }
         stage('Run angular & spring boot application') {
             steps {
-                echo ''
+                echo 'docker -f devops/docker-compose.yml up -d'
             }
         }
     }
