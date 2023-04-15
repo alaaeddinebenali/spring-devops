@@ -18,5 +18,5 @@
 
 FROM openjdk:8-jre-alpine
 EXPOSE 8089
-ADD target/tpAchatProject-1.0-SNAPSHOT.war /app/tpAchatProject.war
-ENTRYPOINT ["java", "-jar", "/tpAchatProject.war"]
+ADD target/tpAchatProject-1.0-SNAPSHOT.jar /app/tpAchatProject.jar
+ENTRYPOINT ["java", "-jar", "/tpAchatProject.jar"]

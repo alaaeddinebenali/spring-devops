@@ -1,31 +1,53 @@
-# docker-compose.yml
-version: "3.8"
+version: '3'
 
+# Define the services (containers) that make up the application
 services:
+  # Define the MySQL service
   mysqldb:
-    image: mysql:5.7
-    restart: always
-    environment:
-      - MYSQL_DATABASE=tpachato
-      - MYSQL_ROOT_PASSWORD=root
-    ports:
-      - 3306:3306
+    # Use the latest version of the official MySQL Docker image
+    image: mysql:latest
+    # Create a volume to store the MySQL data
     volumes:
-      - db-data:/var/lib/mysql
-
-  spring_app:
-    image: alaaeddinebenali/spring-tp-achat-project:11
-    restart: on-failure
+      - mysqlservice_data:/var/lib/mysql
+    # Set environment variables for the MySQL container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tpachato
     ports:
-      - 8089:8089
+      - "3306:3306"
+    networks:
+      - application-network
+  # Define the Spring Boot application service
+  spring-app:
     depends_on:
       - mysqldb
+    restart: on-failure
+    # Use the Docker image for the Spring Boot application
+    image: alaaeddinebenali/spring-tp-achat-project:11
+    # Set environment variables for the Spring Boot container
+    # environment:
+    # Expose the port used by the Spring Boot application container
+    ports:
+      - "8089:8089"
+    networks:
+      - application-network
 
   angular-app:
     image: alaaeddinebenali/angular-tp-achat-project:latest
     ports:
-      - 4200:4200
+      - "4200:4200"
     depends_on:
-      - spring_app
+      - spring-app
+
+    networks:
+      - application-network
+
+# Define the volume used by the MySQL container
 volumes:
-  db-data:
+  mysqlservice_data:
+
+# Define the network used by the containers
+networks:
+  application-network:
+    external:
+      name: application-network
